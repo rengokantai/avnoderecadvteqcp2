@@ -1,7 +1,7 @@
 var http = require('http'),
 fs = require('fs'),
 url = require('url'),
-ws = require('websocket').server;
+wss = require('websocket').server;
 
 
 var server = http.createServer(function(req,res){
@@ -21,7 +21,7 @@ var serverConfig = {
 	autoAcceptConnections: false
 }
 
-var wsserver = new ws();
+var wsserver = new wss();
 
 wsserver.mount(serverConfig);
 wsserver.on('connect',function(conn){
@@ -30,10 +30,10 @@ wsserver.on('connect',function(conn){
 
 wsserver.on('request',function(req){
 	var connection = req.accept('echo-protocol',req.origin);
-	connection.on('message',function(mes){
-		if(mes.type==='utf8'){
+	connection.on('message',function(msg){
+		if(msg.type==='utf8') {
 			console.log(msg.utf8Data);
-		}else(msg.type==='binary'){
+		}else if(msg.type==='binary') {
 			console.log(msg.binaryData);
 		}
 	});
